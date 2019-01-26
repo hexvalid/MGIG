@@ -131,6 +131,7 @@ passwd hexvalid
 emerge --ask net-misc/dhcpcd
 emerge --ask --noreplace net-misc/netifrc
 emerge --ask --changed-use net-misc/openssh
+# sudo 
 
 ```
 
