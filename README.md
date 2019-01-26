@@ -101,7 +101,7 @@ HOME_PARTUUID=$(blkid $HOME_PARTITION | cut -d '"' -f 8)
 
 **Kernel**
 ```
-emerge --oneshot sys-kernel/ck-sources sys-kernel/linux-firmware sys-apps/pciutils sys-apps/usbutils -j 4
+emerge --oneshot sys-kernel/gentoo-sources sys-kernel/linux-firmware sys-apps/pciutils sys-apps/usbutils -j 4
 #copy ck config
 #...
 
@@ -125,13 +125,14 @@ mount /sys/firmware/efi/efivars -o ro,remount
 passwd
 nano /etc/conf.d/keymaps
 
-useradd -m -G audio,cdrom,portage,usb,users,video,wheel,audio -s /bin/bash hexvalid
+useradd -m -G audio,cdrom,portage,usb,users,video,wheel -s /bin/bash hexvalid
 passwd hexvalid
 
 emerge --ask net-misc/dhcpcd
 emerge --ask --noreplace net-misc/netifrc
 emerge --ask --changed-use net-misc/openssh
-# sudo 
+# REQ PACKAGES: app-admin/sudo dev-vcs/git www-client/firefox app-shells/bash-completion
+
 
 ```
 
