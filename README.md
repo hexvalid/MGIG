@@ -54,5 +54,77 @@ wget ${MIRROR_URL}releases/amd64/autobuilds/$LASTEST_STAGE -O /tmp/latest-stage3
 **Unpacking stage**
 ```
 tar xpvf /tmp/latest-stage3-amd64.tar.bz2 --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo/ && sync
+rm -f /tmp/latest-stage3-amd64.tar.bz2
 ```
 
+**Configs**
+```
+nano -w /mnt/gentoo/etc/portage/make.conf
+
+```
+
+**Chroot**
+```
+cp -L /etc/resolv.conf /mnt/gentoo/etc/
+mount -t proc /proc /mnt/gentoo/proc
+mount --rbind /sys /mnt/gentoo/sys
+mount --make-rslave /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+mount --make-rslave /mnt/gentoo/dev
+mount --rbind /tmp /mnt/gentoo/tmp
+chroot /mnt/gentoo /bin/bash
+source /etc/profile
+export PS1="(chroot) $PS1"
+```
+
+**Init portage**
+```
+emerge-webrsync
+emerge --sync
+eselect news list 
+eselect news read
+```
+
+**World**
+```
+emerge --ask --update --deep --newuse @world -j2
+emerge --ask --depclean 
+```
+
+**FSTAB**
+```
+BOOT_PARTUUID=$(blkid $BOOT_PARTITION | cut -d '"' -f 8)
+ROOT_PARTUUID=$(blkid $ROOT_PARTITION | cut -d '"' -f 8)
+HOME_PARTUUID=$(blkid $HOME_PARTITION | cut -d '"' -f 8)
+# and write template
+```
+
+**Kernel**
+```
+emerge --oneshot sys-kernel/ck-sources sys-kernel/linux-firmware sys-apps/pciutils sys-apps/usbutils -j 4
+#copy ck config
+#...
+
+make -j8
+make modules_install
+make install
+cp arch/x86/boot/bzImage /boot/EFI/gentoo/bzImage.efi
+```
+
+**Bootloader**
+```
+emerge --ask sys-boot/efibootmgr
+mount /sys/firmware/efi/efivars -o rw,remount
+efibootmgr -c -d /dev/sda -p 1 -L "gentoo" -l "\efi\gentoo\bzImage.efi"
+mount /sys/firmware/efi/efivars -o ro,remount
+```
+
+
+
+**X**
+```
+emerge --ask --verbose x11-base/xorg-drivers -j 4
+emerge --ask --verbose x11-base/xorg-server
+emerge --ask --verbose x11-apps/setxkbmap
+emerge --ask --verbose x11-apps/xrandr
+```
