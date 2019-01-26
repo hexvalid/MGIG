@@ -65,7 +65,7 @@ nano -w /mnt/gentoo/etc/portage/make.conf
 
 **Chroot**
 ```
-cp -L /etc/resolv.conf /mnt/gentoo/etc/
+cp -Lrf /etc/resolv.conf /mnt/gentoo/etc/
 mount -t proc /proc /mnt/gentoo/proc
 mount --rbind /sys /mnt/gentoo/sys
 mount --make-rslave /mnt/gentoo/sys
@@ -119,12 +119,26 @@ efibootmgr -c -d /dev/sda -p 1 -L "gentoo" -l "\efi\gentoo\bzImage.efi"
 mount /sys/firmware/efi/efivars -o ro,remount
 ```
 
+**MICS**
+```
+/etc/conf.d/hostname
+passwd
+nano /etc/conf.d/keymaps
+
+useradd -m -G audio,cdrom,portage,usb,users,video,wheel,audio -s /bin/bash hexvalid
+passwd hexvalid
+
+emerge --ask net-misc/dhcpcd
+emerge --ask --noreplace net-misc/netifrc
+emerge --ask --changed-use net-misc/openssh
+
+```
+
+
 
 
 **X**
 ```
-emerge --ask --verbose x11-base/xorg-drivers -j 4
-emerge --ask --verbose x11-base/xorg-server
-emerge --ask --verbose x11-apps/setxkbmap
-emerge --ask --verbose x11-apps/xrandr
+emerge --ask --verbose x11-base/xorg-drivers x11-base/xorg-server x11-apps/setxkbmap x11-apps/xrandr x11-apps/xinit -j2
+emerge --ask x11-wm/i3-gaps x11-misc/i3blocks x11-terms/rxvt-unicode x11-misc/dmenu media-gfx/feh -j 3
 ```
