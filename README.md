@@ -1,8 +1,9 @@
 ## Installation
 
-SSD Cell Cleaning can be using with [ThinkPad Drive Erase Utility](https://pcsupport.lenovo.com/us/en/downloads/ds019026)
-
-***: for require contuine installation*
+**1.1 NVMe SSD Cell Cleaning**
+```
+nvme format -s1 /dev/nvme0n1
+```
 
 ****Define target install disk, root and boot partition size, and portage mirror**
 
