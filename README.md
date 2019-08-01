@@ -2,7 +2,7 @@
 
 **1.1 NVMe SSD Cell Cleaning**
 ```
-wget https://github.com/hexvalid/MyGentoo/raw/master/nvme -O /tmp/nvme
+wget https://github.com/hexvalid/MGIG/raw/master/bin/nvme -O /tmp/nvme
 nvme format -s1 /dev/nvme0n1
 ```
 
